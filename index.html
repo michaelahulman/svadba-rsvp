@@ -62,6 +62,7 @@
       transition: border-color 0.15s;
       outline: none;
       appearance: none;
+      -webkit-appearance: none;
     }
     .field input:focus, .field select:focus, .field textarea:focus { border-color: #5f5e5a; }
     .field textarea { resize: vertical; min-height: 72px; line-height: 1.6; }
@@ -146,7 +147,7 @@
       cursor: pointer; transition: all 0.15s;
     }
     .submit-btn:hover { background: #f1efe8; }
-    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .submit-btn:active { transform: scale(0.99); }
 
     .success { display: none; text-align: center; padding: 3rem 1.5rem; }
     .success-icon { font-size: 28px; margin-bottom: 1rem; color: #b4b2a9; }
@@ -164,24 +165,24 @@
 
   <div id="form-view">
     <div class="header">
-      <h1>Sarah &amp; James</h1>
-      <p>12. júla 2025 &nbsp;·&nbsp; Prosíme odpovedajte do 1. júna</p>
+      <h1>Michaela &amp; Robert</h1>
+      <p>28. novembra 2026 &nbsp;·&nbsp; Prosím, dajte nám vedieť do 15. 08.</p>
     </div>
 
     <!-- Osobné údaje -->
     <p class="section-label">Vaše údaje</p>
     <div class="row">
-      <div class="field"><label>Meno</label><input type="text" id="main-first-name" placeholder="napr. Jana" required /></div>
-      <div class="field"><label>Priezvisko</label><input type="text" id="main-last-name" placeholder="napr. Nováková" required /></div>
+      <div class="field"><label>Meno</label><input type="text" placeholder="napr. Michaela" /></div>
+      <div class="field"><label>Priezvisko</label><input type="text" placeholder="napr. Hulmanová" /></div>
     </div>
-    <div class="field"><label>E-mailová adresa</label><input type="email" id="main-email" placeholder="vas@email.sk" required /></div>
+    <div class="field"><label>E-mailová adresa</label><input type="email" placeholder="robert@spurny.sk" /></div>
 
     <div class="divider"></div>
 
     <!-- Ubytovanie -->
     <p class="section-label">Ubytovanie</p>
     <div class="info-box">
-      Check-in od 14:00, check-out do 10:00. Raňajky podávame 8:00–10:00. K cene sa pripočítava miestny poplatok 40 Kč / osoba / noc.
+      Check-in od 14:00 (pre svadobčanov postupne od 12:00), check-out do 10:00. Raňajky podávame 8:00–10:00 a sú zahrnuté v cene. K cene sa pripočítava miestny poplatok 40 Kč / osoba / noc.
     </div>
 
     <div class="field">
@@ -192,7 +193,7 @@
         <option value="d22">2-lôžková izba + prístelka (2+2)</option>
         <option value="t3">3-lôžková izba (3)</option>
         <option value="t32">3-lôžková izba + prístelka (3+2)</option>
-        <option value="v6">Veľká viaclôžková izba (max. 6 osôb)</option>
+        <option value="v6">Veľká viaclôžková izba (4+2, max. 6 osôb)</option>
         <option value="ra">Rodinný apartmán (4–8 lôžok)</option>
         <option value="sa">Svadobný apartmán</option>
         <option value="none">Bez ubytovania</option>
@@ -201,41 +202,62 @@
 
     <div id="room-info" style="display:none;" class="info-box"></div>
 
-    <div id="date-fields" class="row">
-      <div class="field"><label>Dátum príchodu</label><input type="date" id="date-in" min="2025-07-11" max="2025-07-13" value="2025-07-12" onchange="updateRoomInfo()" /></div>
-      <div class="field"><label>Dátum odchodu</label><input type="date" id="date-out" min="2025-07-12" max="2025-07-14" value="2025-07-13" onchange="updateRoomInfo()" /></div>
+    <div id="date-fields">
+      <div class="field">
+        <label>Dátum príchodu <span style="color:#b4b2a9; font-weight:400;">(odchod vždy 29. 11. 2026)</span></label>
+        <div class="pill-group">
+          <label class="pill"><input type="radio" name="nights" value="2" onchange="updateRoomInfo()" checked><span>27. 11. 2026 &nbsp;(2 noci)</span></label>
+          <label class="pill"><input type="radio" name="nights" value="1" onchange="updateRoomInfo()"><span>28. 11. 2026 &nbsp;(1 noc)</span></label>
+        </div>
+      </div>
     </div>
 
     <div class="row-3">
       <div class="field">
         <label>Dospelí (18+)</label>
-        <select id="count-adults">
-          <option>1</option><option selected>2</option><option>3</option><option>4</option>
+        <select id="cnt-adults" onchange="updateRoomInfo()">
+          <option value="">Počet...</option>
+          <option>1</option><option>2</option><option>3</option><option>4</option>
           <option>5</option><option>6</option><option>7</option><option>8</option>
         </select>
       </div>
       <div class="field">
-        <label>Deti 3–12 r.</label>
-        <select id="count-kids">
-          <option value="0">0</option><option>1</option><option>2</option><option>3</option>
+        <label>Deti 3–12 rokov</label>
+        <select id="cnt-kids" onchange="updateRoomInfo()">
+          <option value="0">0</option>
+          <option>1</option><option>2</option><option>3</option><option>4</option>
         </select>
       </div>
       <div class="field">
-        <label>Deti do 3 r.</label>
-        <select id="count-infants">
-          <option value="0">0</option><option>1</option><option>2</option>
+        <label>Deti do 3 rokov</label>
+        <select id="cnt-toddlers" onchange="updateRoomInfo()">
+          <option value="0">0</option>
+          <option>1</option><option>2</option><option>3</option>
         </select>
       </div>
+    </div>
+    <div class="field" style="max-width:calc(33% - 4px);">
+      <label>Počet prístelok</label>
+      <select id="cnt-extra" onchange="updateRoomInfo()">
+        <option value="0">0</option>
+        <option>1</option><option>2</option><option>3</option><option>4</option>
+      </select>
+    </div>
+    <div class="info-box">
+      Deti do 3 rokov bez nároku na lôžko — zadarmo. Deti 3–12 rokov bez lôžka — 150 Kč (hodnota raňajok). Deti s lôžkom: štandardná cena znížená o 150 Kč (do 3 r.) alebo o 50 Kč (3–12 r.).
     </div>
 
     <div class="divider"></div>
 
     <!-- Výber menu -->
     <p class="section-label">Výber menu</p>
+    <div class="info-box" style="font-size:13px; line-height:1.7;">
+      Keďže, ako iste viete, sme sami alergénovo nároční, počítame s tým, že niektoré jedlá upravíme podľa vašich potrieb. Dajte nám prosím vedieť, o ktoré menu máte záujem a prípadne doplňte vaše stravovacie obmedzenia.
+    </div>
     <div id="guests-container"></div>
     <div style="display:flex; gap:10px; margin-top:0.25rem;">
-      <button type="button" class="add-btn" style="flex:1;" onclick="addGuest()">+ Pridať ďalšieho hosťa</button>
-      <button type="button" class="add-btn" style="flex:1;" onclick="duplicateLastGuest()">⧉ Skopírovať výber</button>
+      <button class="add-btn" style="flex:1;" onclick="addGuest()">+ Pridať ďalšieho hosťa</button>
+      <button class="add-btn" style="flex:1;" onclick="duplicateLastGuest()" title="Skopíruje výber posledného hosťa">⧉ Skopírovať posledný výber</button>
     </div>
 
     <div class="divider"></div>
@@ -243,10 +265,10 @@
     <!-- Iné -->
     <p class="section-label">Ďalšie informácie</p>
     <div class="field">
-      <textarea id="final-notes" placeholder="Bezbariérový prístup, špeciálne požiadavky, správa pre novomanželov..."></textarea>
+      <textarea placeholder="Bezbariérový prístup, špeciálne požiadavky, správa pre novomanželov..."></textarea>
     </div>
 
-    <button type="button" class="submit-btn" onclick="submitForm()">Odoslať odpoveď</button>
+    <button class="submit-btn" onclick="submitForm()">Odoslať odpoveď</button>
   </div>
 
   <div class="success" id="success-view">
@@ -256,92 +278,163 @@
   </div>
 
 </div>
-
 <script>
-  // Prices & Config
-  const ROOM_PRICES = {
-    d2:  { 1: { bed: 1570, extra: null }, 2: { bed: 1370, extra: null } },
-    d22: { 1: { bed: 1570, extra: 700  }, 2: { bed: 1170, extra: 700  } },
-    t3:  { 1: { bed: 1570, extra: null }, 2: { bed:  970, extra: null } },
-    t32: { 1: { bed: 1170, extra: 700  }, 2: { bed:  970, extra: 700  } },
-    v6:  { 1: { bed: null, extra: null }, 2: { bed:  970, extra: 700  } },
-    ra:  { 1: { bed: 1670, extra: null }, 2: { bed: 1270, extra: null } },
-    sa:  { 1: { bed: 3200, extra: null }, 2: { bed: 1800, extra: null } },
-  };
   const ROOM_NAMES = {
-    d2: '2-lôžková izba', d22: '2-lôžková + prístelka',
-    t3: '3-lôžková izba', t32: '3-lôžková + prístelka',
-    v6: 'Viaclôžková izba', ra: 'Rodinný apartmán', sa: 'Svadobný apartmán'
+    d2: '2-lôžková izba (2)', d22: '2-lôžková izba + prístelka (2+2)',
+    t3: '3-lôžková izba (3)', t32: '3-lôžková izba + prístelka (3+2)',
+    v6: 'Veľká viaclôžková izba (max. 6 osôb)', ra: 'Rodinný apartmán (4–8 lôžok)',
+    sa: 'Svadobný apartmán'
   };
+
+  // getBedPrice(roomType, nights, totalPeople) → price per standard bed per person per night
+  // extraPrice → always 700 Kč/os./noc where applicable
+  function getBedPrice(room, nights, people) {
+    const n = nights >= 2 ? 2 : 1;
+    if (room === 'sa') return n === 1 ? (people <= 1 ? 3200 : 1800) : (people >= 3 ? 1170 : 1800);
+    if (room === 'ra') return n === 1 ? null : (people >= 4 ? 1170 : (people === 3 ? 1270 : 1670));
+    if (room === 'v6') return n === 1 ? null : 970;
+    // all standard rooms (d2, d22, t3, t32)
+    return n === 1 ? 1570 : 1170;
+  }
+
+  function getExtraPrice(room) {
+    return ['d22','t32','v6'].includes(room) ? 700 : null;
+  }
 
   function getNights() {
-    const i = document.getElementById('date-in').value;
-    const o = document.getElementById('date-out').value;
-    if (!i || !o) return null;
-    const diff = (new Date(o) - new Date(i)) / 86400000;
-    return diff > 0 ? diff : null;
+    const r = document.querySelector('input[name="nights"]:checked');
+    return r ? parseInt(r.value) : 2;
+  }
+
+  function getHeadcount() {
+    const adults = parseInt(document.getElementById('cnt-adults').value) || 0;
+    const kids   = parseInt(document.getElementById('cnt-kids').value)   || 0;
+    const todds  = parseInt(document.getElementById('cnt-toddlers').value) || 0;
+    const extra  = parseInt(document.getElementById('cnt-extra').value)  || 0;
+    return { adults, kids, todds, extra, total: adults + kids + todds, beds: adults + kids + todds - extra };
   }
 
   function updateRoomInfo() {
     const val = document.getElementById('room-type').value;
     const box = document.getElementById('room-info');
     const dates = document.getElementById('date-fields');
-    if (val === 'none' || !val) { box.style.display = 'none'; dates.style.display = val==='none'?'none':'grid'; return; }
-    
-    dates.style.display = 'grid';
+    if (val === 'none') { box.style.display = 'none'; dates.style.display = 'none'; return; }
+    dates.style.display = 'block';
+    if (!val) { box.style.display = 'none'; return; }
+
     const nights = getNights();
-    const tier = nights && nights >= 2 ? 2 : 1;
-    const p = ROOM_PRICES[val] ? ROOM_PRICES[val][tier] : null;
-    
-    let msg = ROOM_NAMES[val] + '.';
-    if (nights) msg += ' Počet nocí: ' + nights + '.';
-    if (p && p.bed) {
-      msg += ' Cena za lôžko: ' + p.bed + ' Kč / osoba / noc.';
-    } else if (val === 'v6' && tier === 1) {
-      msg = 'Táto izba je dostupná len pri pobyte 2 a viac nocí.';
+    const hc = getHeadcount();
+    const bedPrice = getBedPrice(val, nights, hc.total);
+    const extraPrice = getExtraPrice(val);
+
+    if (!bedPrice) {
+      box.innerHTML = '<strong>' + ROOM_NAMES[val] + '</strong> — táto izba nie je dostupná na 1 noc. Vyberte príchod 27. 11.';
+      box.style.display = 'block';
+      return;
     }
-    msg += ' (+40 Kč miestny poplatok)';
-    box.textContent = msg;
+
+    // calculate total
+    const bedCount = Math.max(0, hc.total - hc.extra);
+    const bedTotal = bedCount * bedPrice * nights;
+    const extraTotal = hc.extra * (extraPrice || 0) * nights;
+    const taxTotal = hc.total * 40 * nights;
+    const grandTotal = bedTotal + extraTotal + taxTotal;
+
+    let lines = '<strong>' + ROOM_NAMES[val] + '</strong><br>';
+    lines += 'Cena za lôžko: <strong>' + bedPrice + ' Kč</strong> / os. / noc';
+    if (extraPrice) lines += ' &nbsp;·&nbsp; Prístelka: <strong>' + extraPrice + ' Kč</strong> / os. / noc';
+    lines += ' &nbsp;·&nbsp; Miestny poplatok: +40 Kč / os. / noc';
+    if (val === 'sa') lines += '<br>Novomanželia: 50 % zľava na svadobnú noc.';
+
+    if (hc.total > 0) {
+      lines += '<br><br>';
+      if (bedCount > 0) lines += bedCount + ' × lôžko × ' + nights + ' noc' + (nights > 1 ? 'i' : '') + ' = ' + bedTotal + ' Kč';
+      if (hc.extra > 0 && extraPrice) lines += ' &nbsp;+&nbsp; ' + hc.extra + ' × prístelka × ' + nights + ' noc' + (nights > 1 ? 'i' : '') + ' = ' + extraTotal + ' Kč';
+      lines += ' &nbsp;+&nbsp; ' + hc.total + ' × daň = ' + taxTotal + ' Kč';
+      lines += '<br><strong>Odhadovaná cena spolu: ' + grandTotal + ' Kč</strong>';
+    }
+
+    box.innerHTML = lines;
     box.style.display = 'block';
   }
 
   function makeMenuBlock(n) {
-    const diets = ['Bezlepkové','Bez laktózy','Orechy','Vegetarián','Vegan','Žiadne'];
-    const pills = diets.map(d => `<label class="pill"><input type="checkbox" value="${d}"><span>${d}</span></label>`).join('');
+    const diets = ['Bezlepkové','Bez laktózy','Alergia na orechy','Alergia na mäkkýše','Halal','Košer','Žiadne'];
+    const pills = diets.map(d => `<label class="pill"><input type="checkbox"><span>${d}</span></label>`).join('');
+    const nameField = n > 1 ? `<div class="field"><label>Celé meno hosťa</label><input type="text" placeholder="Meno a priezvisko"></div>` : '';
     return `
       <div class="guest-block">
         <p class="guest-num">Hosť ${n}${n === 1 ? ' (vy)' : ''}</p>
-        <div class="field"><label>Meno hosťa</label><input type="text" class="g-name" placeholder="Meno a priezvisko"></div>
+        ${nameField}
         <div class="field">
           <label>Výber menu</label>
           <label class="menu-card" onclick="selectMenu(this)">
-            <input type="radio" name="meal_${n}" value="Menu A">
-            <p class="menu-tag">Menu A (Mäso)</p>
-            <p class="menu-course" style="font-size:11px">Kačacie rillettes · Kurací vývar · Hovädzie líčka</p>
+            <input type="radio" name="meal_${n}" value="A">
+            <p class="menu-tag">Menu A</p>
+            <span class="course-label">Predjedlo</span>
+            <p class="menu-course">Kačacie rillettes so žeruchou a chlebom</p>
+            <span class="course-label">Polievka</span>
+            <p class="menu-course">Kurací vývar s cestovinami</p>
+            <span class="course-label">Hlavné jedlo</span>
+            <p class="menu-course">Hovädzie líčka s omáčkou z červeného vína so šťuchanými zemiakmi</p>
           </label>
           <label class="menu-card" onclick="selectMenu(this)">
-            <input type="radio" name="meal_${n}" value="Menu B">
-            <p class="menu-tag">Menu B (Vegetarián)</p>
-            <p class="menu-course" style="font-size:11px">Cviklové carpaccio · Zeleninový vývar · Plnené hokaido</p>
+            <input type="radio" name="meal_${n}" value="B">
+            <p class="menu-tag">Menu B — vegetariánske</p>
+            <span class="course-label">Predjedlo</span>
+            <p class="menu-course">Cviklové carpaccio s fetou a píniovými orieškami</p>
+            <span class="course-label">Polievka</span>
+            <p class="menu-course">Zeleninový vývar s krupicovými nočkami</p>
+            <span class="course-label">Hlavné jedlo</span>
+            <p class="menu-course">Pečené hokaido plnené zeleninou a tofu</p>
           </label>
         </div>
         <div class="field">
-          <label>Alergie / obmedzenia</label>
+          <label>Potravinové alergie a obmedzenia</label>
           <div class="pill-group">${pills}</div>
         </div>
         <div class="field">
-          <textarea class="g-notes" placeholder="Iné požiadavky na jedlo..."></textarea>
+          <label>Iné stravovacie požiadavky</label>
+          <textarea placeholder="Opíšte prípadné ďalšie požiadavky..."></textarea>
         </div>
       </div>`;
   }
 
   let guestCount = 0;
+
   function addGuest() {
     guestCount++;
     const container = document.getElementById('guests-container');
     const div = document.createElement('div');
     div.innerHTML = makeMenuBlock(guestCount);
     container.appendChild(div.firstElementChild);
+  }
+
+  function duplicateLastGuest() {
+    const container = document.getElementById('guests-container');
+    const blocks = container.querySelectorAll('.guest-block');
+    if (blocks.length === 0) { addGuest(); return; }
+    const last = blocks[blocks.length - 1];
+    const selectedMenu = last.querySelector('.menu-card.selected');
+    const selectedValue = selectedMenu ? selectedMenu.querySelector('input[type=radio]').value : null;
+    const checkedDiets = Array.from(last.querySelectorAll('.pill input[type=checkbox]:checked')).map(cb => cb.closest('.pill').querySelector('span').textContent);
+    const otherNotes = last.querySelector('textarea') ? last.querySelector('textarea').value : '';
+    guestCount++;
+    const n = guestCount;
+    const div = document.createElement('div');
+    div.innerHTML = makeMenuBlock(n);
+    const block = div.firstElementChild;
+    container.appendChild(block);
+    if (selectedValue) {
+      const newCards = block.querySelectorAll('.menu-card');
+      newCards.forEach(c => { if (c.querySelector('input[type=radio]').value === selectedValue) selectMenu(c); });
+    }
+    checkedDiets.forEach(label => {
+      block.querySelectorAll('.pill').forEach(pill => {
+        if (pill.querySelector('span').textContent === label) pill.querySelector('input').checked = true;
+      });
+    });
+    if (otherNotes && block.querySelector('textarea')) block.querySelector('textarea').value = otherNotes;
   }
 
   function selectMenu(card) {
@@ -351,87 +444,11 @@
     card.querySelector('input[type=radio]').checked = true;
   }
 
-  function duplicateLastGuest() {
-    const container = document.getElementById('guests-container');
-    const blocks = container.querySelectorAll('.guest-block');
-    if (blocks.length === 0) { addGuest(); return; }
-    const last = blocks[blocks.length - 1];
-    
-    // Capture data
-    const menuVal = last.querySelector('input[type=radio]:checked')?.value;
-    const diets = Array.from(last.querySelectorAll('.pill input:checked')).map(i => i.value);
-    
-    addGuest();
-    const newBlock = container.lastElementChild;
-    if (menuVal) {
-      const card = Array.from(newBlock.querySelectorAll('.menu-card')).find(c => c.querySelector('input').value === menuVal);
-      if (card) selectMenu(card);
-    }
-    diets.forEach(d => {
-      const pill = Array.from(newBlock.querySelectorAll('.pill input')).find(i => i.value === d);
-      if (pill) pill.checked = true;
-    });
+  function submitForm() {
+    document.getElementById('form-view').style.display = 'none';
+    document.getElementById('success-view').style.display = 'block';
   }
 
-  // --- SUBMIT LOGIC ---
-  async function submitForm() {
-    const btn = document.querySelector('.submit-btn');
-    
-    // Simple Validation
-    if (!document.getElementById('main-first-name').value || !document.getElementById('main-email').value) {
-      alert('Prosím vyplňte meno a email.');
-      return;
-    }
-
-    btn.innerText = "Odosiela sa...";
-    btn.disabled = true;
-
-    // 1. Gather Data
-    const guestBlocks = document.querySelectorAll('.guest-block');
-    let guestSummary = "";
-    guestBlocks.forEach((block, i) => {
-      const name = block.querySelector('.g-name').value || `Hosť ${i+1}`;
-      const menu = block.querySelector('input[type=radio]:checked')?.value || "Nevybrané";
-      const diets = Array.from(block.querySelectorAll('.pill input:checked')).map(c => c.value).join(", ");
-      const notes = block.querySelector('.g-notes').value;
-      guestSummary += `${name} [Menu: ${menu}] [Diéty: ${diets}] [Pozn: ${notes}]\n\n`;
-    });
-
-    const formData = {
-      firstName: document.getElementById('main-first-name').value,
-      lastName: document.getElementById('main-last-name').value,
-      email: document.getElementById('main-email').value,
-      roomType: document.getElementById('room-type').value,
-      dates: `${document.getElementById('date-in').value} do ${document.getElementById('date-out').value}`,
-      totalPeople: `D: ${document.getElementById('count-adults').value}, D3-12: ${document.getElementById('count-kids').value}, D<3: ${document.getElementById('count-infants').value}`,
-      guestDetails: guestSummary,
-      notes: document.getElementById('final-notes').value
-    };
-
-    // 2. Send Data
-    const scriptURL = 'https://script.google.com/macros/s/AKfycbxsCnBMt4KSK4LxkL84GlGE09QftZaT3NVos-bhDQ2j76apo920pOAdsLwW9FjJaMtIbQ/exec'; 
-
-    try {
-      await fetch(scriptURL, {
-        method: 'POST',
-        mode: 'no-cors',
-        cache: 'no-cache',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
-      });
-
-      document.getElementById('form-view').style.display = 'none';
-      document.getElementById('success-view').style.display = 'block';
-      window.scrollTo(0, 0);
-    } catch (e) {
-      console.error(e);
-      alert('Chyba pri odosielaní. Skúste to prosím znova.');
-      btn.innerText = "Odoslať odpoveď";
-      btn.disabled = false;
-    }
-  }
-
-  // Init first guest
   addGuest();
 </script>
 </body>
